@@ -35,6 +35,7 @@ export interface Room {
   widthCm: number; // width in cm
   heightCm: number; // height in cm
   wallThickness?: WallThickness; // optional per-wall overrides
+  locked?: boolean; // if true, room cannot be moved or resized
 }
 
 export interface ObjectDef {

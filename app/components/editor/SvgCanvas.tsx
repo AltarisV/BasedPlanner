@@ -349,6 +349,7 @@ export default function SvgCanvas({
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
+      onContextMenu={(e) => e.preventDefault()}
       viewBox="0 0 10000 10000"
       preserveAspectRatio="xMidYMid meet"
     >

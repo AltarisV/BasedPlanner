@@ -8,7 +8,7 @@ export default function KeyboardShortcutsHelp() {
       <div className="font-semibold mb-1.5 text-slate-300">Shortcuts</div>
       <div className="space-y-0.5 text-slate-400">
         <div><span className="text-white">Ctrl+Z</span> Undo • <span className="text-white">Ctrl+Y</span> Redo</div>
-        <div><span className="text-white">Del</span> Delete • <span className="text-white">M</span> Measure</div>
+        <div><span className="text-white">Del</span> Delete • <span className="text-white">M</span> Measure • <span className="text-white">L</span> Lock</div>
         <div><span className="text-white">Ctrl+A</span> Select All • <span className="text-white">Esc</span> Deselect</div>
       </div>
     </div>

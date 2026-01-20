@@ -13,6 +13,7 @@ interface RightPanelProps {
   onUpdateRoomWallThickness: (roomId: string, wallThickness: { north?: number; south?: number; east?: number; west?: number }) => void;
   onDeleteRoom: (roomId: string) => void;
   onDeleteSelected: () => void;
+  onToggleRoomLock: (roomId: string) => void;
   onAddDoor: (roomId: string, wall: 'north' | 'south' | 'east' | 'west', position: number, width: number) => void;
   onUpdateDoor: (openingId: string, updates: Partial<WallOpening>) => void;
   onDeleteDoor: (openingId: string) => void;
@@ -21,6 +22,7 @@ interface RightPanelProps {
   onUpdatePlacedObjectRoom: (objectId: string, roomId: string) => void;
   onUpdatePlacedObjectSize: (objectId: string, widthCm: number, heightCm: number) => void;
   isMobileOpen?: boolean;
+  isCollapsed?: boolean;
   onClose?: () => void;
 }
 
@@ -32,6 +34,7 @@ export default function RightPanel({
   onUpdateRoomWallThickness,
   onDeleteRoom,
   onDeleteSelected,
+  onToggleRoomLock,
   onAddDoor,
   onUpdateDoor,
   onDeleteDoor,
@@ -40,8 +43,14 @@ export default function RightPanel({
   onUpdatePlacedObjectRoom,
   onUpdatePlacedObjectSize,
   isMobileOpen,
+  isCollapsed,
   onClose,
 }: RightPanelProps) {
+  // Hide on desktop if collapsed
+  if (isCollapsed && !isMobileOpen) {
+    return null;
+  }
+  
   return (
     <>
       {/* Mobile backdrop */}
@@ -126,6 +135,7 @@ export default function RightPanel({
             onUpdateDimensions={onUpdateRoomDimensions}
             onUpdateWallThickness={onUpdateRoomWallThickness}
             onDelete={onDeleteRoom}
+            onToggleLock={onToggleRoomLock}
           />
           
           {/* Door Openings Section */}

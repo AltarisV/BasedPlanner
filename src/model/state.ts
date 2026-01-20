@@ -489,6 +489,7 @@ export function deleteSelectedObject(state: AppState): AppState {
 
 /**
  * Move multiple rooms by delta (for multi-select drag).
+ * Respects locked rooms - they won't be moved.
  */
 export function moveRooms(
   state: AppState,
@@ -498,6 +499,7 @@ export function moveRooms(
   return {
     ...state,
     rooms: state.rooms.map((r) => {
+      if (r.locked) return r; // Don't move locked rooms
       const move = movesMap.get(r.id);
       return move ? { ...r, xCm: move.xCm, yCm: move.yCm } : r;
     }),
@@ -506,6 +508,7 @@ export function moveRooms(
 
 /**
  * Nudge selected rooms by delta (for arrow key movement).
+ * Respects locked rooms - they won't be moved.
  */
 export function nudgeSelectedRooms(
   state: AppState,
@@ -516,7 +519,7 @@ export function nudgeSelectedRooms(
   return {
     ...state,
     rooms: state.rooms.map((r) =>
-      selectedSet.has(r.id)
+      selectedSet.has(r.id) && !r.locked
         ? { ...r, xCm: Math.max(0, r.xCm + deltaXCm), yCm: Math.max(0, r.yCm + deltaYCm) }
         : r
     ),
@@ -525,6 +528,7 @@ export function nudgeSelectedRooms(
 
 /**
  * Resize a room (for drag-to-resize).
+ * Respects locked rooms - they won't be resized.
  */
 export function resizeRoom(
   state: AppState,
@@ -534,6 +538,9 @@ export function resizeRoom(
   widthCm: number,
   heightCm: number
 ): AppState {
+  const room = state.rooms.find(r => r.id === roomId);
+  if (room?.locked) return state; // Don't resize locked rooms
+  
   return {
     ...state,
     rooms: state.rooms.map((r) =>
@@ -566,6 +573,35 @@ export function updateViewport(
  */
 export function getRoomById(state: AppState, roomId: string): Room | undefined {
   return state.rooms.find((r) => r.id === roomId);
+}
+
+/**
+ * Toggle room locked state.
+ */
+export function toggleRoomLock(state: AppState, roomId: string): AppState {
+  return {
+    ...state,
+    rooms: state.rooms.map((r) =>
+      r.id === roomId ? { ...r, locked: !r.locked } : r
+    ),
+  };
+}
+
+/**
+ * Lock or unlock all rooms at once.
+ */
+export function setAllRoomsLocked(state: AppState, locked: boolean): AppState {
+  return {
+    ...state,
+    rooms: state.rooms.map((r) => ({ ...r, locked })),
+  };
+}
+
+/**
+ * Check if all rooms are locked.
+ */
+export function areAllRoomsLocked(state: AppState): boolean {
+  return state.rooms.length > 0 && state.rooms.every((r) => r.locked);
 }
 
 /**

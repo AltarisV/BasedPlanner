@@ -21,6 +21,7 @@ interface LeftPanelProps {
   onDuplicatePlaced: (objectId: string) => void;
   onRotatePlaced: (objectId: string, rotation: number) => void;
   isMobileOpen?: boolean;
+  isCollapsed?: boolean;
   onClose?: () => void;
 }
 
@@ -40,8 +41,14 @@ export default function LeftPanel({
   onDuplicatePlaced,
   onRotatePlaced,
   isMobileOpen,
+  isCollapsed,
   onClose,
 }: LeftPanelProps) {
+  // Hide on desktop if collapsed
+  if (isCollapsed && !isMobileOpen) {
+    return null;
+  }
+  
   return (
     <>
       {/* Mobile backdrop */}

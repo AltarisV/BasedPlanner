@@ -33,6 +33,10 @@ export default function RoomEditor() {
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
   const [rightPanelOpen, setRightPanelOpen] = useState(false);
   
+  // Desktop panel collapsed state
+  const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false);
+  const [rightPanelCollapsed, setRightPanelCollapsed] = useState(false);
+  
   // Drag state
   const [dragState, setDragState] = useState<ExtendedDragState | null>(null);
   const [currentSnapResult, setCurrentSnapResult] = useState<Snap.SnapResult | null>(null);
@@ -274,6 +278,7 @@ export default function RoomEditor() {
         onDuplicatePlaced={handleDuplicatePlaced}
         onRotatePlaced={(objectId, rotation) => updateState(State.updatePlacedObjectRotation(appState, objectId, rotation))}
         isMobileOpen={leftPanelOpen}
+        isCollapsed={leftPanelCollapsed}
         onClose={() => setLeftPanelOpen(false)}
       />
 
@@ -283,13 +288,19 @@ export default function RoomEditor() {
           appState={appState}
           toolMode={toolMode}
           measureDistance={measureDistance}
+          allRoomsLocked={State.areAllRoomsLocked(appState)}
+          leftPanelCollapsed={leftPanelCollapsed}
+          rightPanelCollapsed={rightPanelCollapsed}
           onZoomIn={() => updateState(State.updateViewport(appState, appState.panX, appState.panY, Math.min(3, appState.zoom + 0.2)), false)}
           onZoomOut={() => updateState(State.updateViewport(appState, appState.panX, appState.panY, Math.max(0.1, appState.zoom - 0.2)), false)}
           onResetView={() => updateState(State.updateViewport(appState, 50, 50, 1), false)}
           onSelectTool={() => { setToolMode('select'); setMeasurePoints([]); }}
           onMeasureTool={() => { setToolMode('measure'); setMeasurePoints([]); }}
+          onToggleLockAll={() => updateState(State.setAllRoomsLocked(appState, !State.areAllRoomsLocked(appState)))}
           onToggleLeftPanel={() => setLeftPanelOpen(prev => !prev)}
           onToggleRightPanel={() => setRightPanelOpen(prev => !prev)}
+          onCollapseLeftPanel={() => setLeftPanelCollapsed(prev => !prev)}
+          onCollapseRightPanel={() => setRightPanelCollapsed(prev => !prev)}
         />
 
         <div className="relative flex-1 w-full h-full">
@@ -374,6 +385,7 @@ export default function RoomEditor() {
         onUpdateRoomWallThickness={handleUpdateRoomWallThickness}
         onDeleteRoom={handleDeleteRoom}
         onDeleteSelected={handleDeleteSelected}
+        onToggleRoomLock={(roomId) => updateState(State.toggleRoomLock(appState, roomId))}
         onAddDoor={handleAddDoor}
         onUpdateDoor={handleUpdateDoor}
         onDeleteDoor={handleDeleteDoor}
@@ -382,6 +394,7 @@ export default function RoomEditor() {
         onUpdatePlacedObjectRoom={(objectId, roomId) => updateState(State.updatePlacedObjectRoom(appState, objectId, roomId))}
         onUpdatePlacedObjectSize={(objectId, width, height) => updateState(State.updatePlacedObjectSize(appState, objectId, width, height))}
         isMobileOpen={rightPanelOpen}
+        isCollapsed={rightPanelCollapsed}
         onClose={() => setRightPanelOpen(false)}
       />
 

@@ -37,6 +37,20 @@ export function useSvgPointerHandlers({
   const handleSvgPointerDown = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (!svgRef.current) return;
 
+    // Middle mouse button (button === 1) always starts panning from anywhere
+    if (e.button === 1) {
+      e.preventDefault();
+      svgRef.current.setPointerCapture(e.pointerId);
+      setDragState({
+        roomId: '__pan__',
+        startX: e.clientX,
+        startY: e.clientY,
+        roomStartX: appState.panX,
+        roomStartY: appState.panY,
+      });
+      return;
+    }
+
     const { x, y } = Interaction.getSvgCoordinates(
       e,
       svgRef.current,
@@ -72,10 +86,10 @@ export function useSvgPointerHandlers({
     const roomEl = target.closest?.('[data-room-id]') as Element | null;
     const roomId = roomEl?.getAttribute('data-room-id');
 
-    // If clicked on a resize handle, start resize
+    // If clicked on a resize handle, start resize (unless room is locked)
     if (resizeHandle && resizeRoomId) {
       const room = State.getRoomById(appState, resizeRoomId);
-      if (room) {
+      if (room && !room.locked) {
         setDragState({
           roomId: resizeRoomId,
           startX: x,
@@ -118,11 +132,22 @@ export function useSvgPointerHandlers({
         handleSelectRoom(room.id);
       }
 
+      // If room is locked, don't allow dragging - just select and allow panning
+      if (room.locked) {
+        return;
+      }
+
       const selectedIds = isAlreadySelected ? appState.selectedRoomIds : [room.id];
+      // Filter out locked rooms from multi-drag
       const multiDragRooms = selectedIds.map((id) => {
         const r = State.getRoomById(appState, id);
-        return r ? { id: r.id, startXCm: r.xCm, startYCm: r.yCm } : null;
+        return r && !r.locked ? { id: r.id, startXCm: r.xCm, startYCm: r.yCm } : null;
       }).filter(Boolean) as Array<{ id: string; startXCm: number; startYCm: number }>;
+
+      // If all selected rooms are locked, don't start dragging
+      if (multiDragRooms.length === 0) {
+        return;
+      }
 
       const ds: ExtendedDragState = {
         roomId: room.id,
@@ -151,10 +176,11 @@ export function useSvgPointerHandlers({
   const handleSvgPointerMove = useCallback((e: React.PointerEvent<SVGSVGElement>) => {
     if (!svgRef.current || !dragState) return;
 
-    // Panning
+    // Panning - with speed multiplier for faster navigation
     if (dragState.roomId === '__pan__') {
-      const deltaX = e.clientX - dragState.startX;
-      const deltaY = e.clientY - dragState.startY;
+      const panSpeed = 5.0; // Increased for much faster panning
+      const deltaX = (e.clientX - dragState.startX) * panSpeed;
+      const deltaY = (e.clientY - dragState.startY) * panSpeed;
       const newPanX = dragState.roomStartX + deltaX;
       const newPanY = dragState.roomStartY + deltaY;
       updateState(State.updateViewport(appState, newPanX, newPanY, appState.zoom), false);

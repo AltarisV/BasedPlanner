@@ -15,6 +15,7 @@ interface RoomPropertiesPanelProps {
     west?: number;
   }) => void;
   onDelete: (roomId: string) => void;
+  onToggleLock?: (roomId: string) => void;
 }
 
 export function RoomPropertiesPanel({
@@ -24,6 +25,7 @@ export function RoomPropertiesPanel({
   onUpdateDimensions,
   onUpdateWallThickness,
   onDelete,
+  onToggleLock,
 }: RoomPropertiesPanelProps) {
   const [name, setName] = useState(room.name);
   const [widthCm, setWidthCm] = useState(room.widthCm);
@@ -86,6 +88,28 @@ export function RoomPropertiesPanel({
           />
           <p className="text-xs text-slate-400">{room.widthCm} × {room.heightCm} cm</p>
         </div>
+        {/* Lock button */}
+        {onToggleLock && (
+          <button
+            onClick={() => onToggleLock(room.id)}
+            className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all ${
+              room.locked 
+                ? 'bg-amber-100 text-amber-600 hover:bg-amber-200' 
+                : 'hover:bg-slate-100 text-slate-400 hover:text-slate-600'
+            }`}
+            title={room.locked ? 'Unlock room' : 'Lock room'}
+          >
+            {room.locked ? (
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/>
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h2c0-1.66 1.34-3 3-3s3 1.34 3 3v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+              </svg>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Dimensions */}

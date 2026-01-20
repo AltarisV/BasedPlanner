@@ -89,6 +89,13 @@ export function useKeyboardShortcuts({
         return;
       }
 
+      // L key: toggle lock all rooms
+      if (e.key === 'l' || e.key === 'L') {
+        e.preventDefault();
+        updateState(State.setAllRoomsLocked(appState, !State.areAllRoomsLocked(appState)));
+        return;
+      }
+
       // Escape: clear selection/tool mode
       if (e.key === 'Escape') {
         if (toolMode !== 'select') {
