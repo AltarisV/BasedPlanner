@@ -34,25 +34,25 @@ export function AddRoomForm({ onAddRoom }: AddRoomFormProps) {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         <div>
-          <label className="block text-sm font-medium text-slate-600 mb-1">Width (cm)</label>
+          <label className="block text-sm font-medium text-slate-600 mb-1">B (cm)</label>
           <input
             type="number"
             min="1"
             value={widthCm}
             onChange={(e) => setWidthCm(Number(e.target.value))}
-            className="input-field"
+            className="input-field w-full"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-600 mb-1">Height (cm)</label>
+          <label className="block text-sm font-medium text-slate-600 mb-1">H (cm)</label>
           <input
             type="number"
             min="1"
             value={heightCm}
             onChange={(e) => setHeightCm(Number(e.target.value))}
-            className="input-field"
+            className="input-field w-full"
           />
         </div>
       </div>

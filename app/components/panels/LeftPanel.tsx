@@ -91,19 +91,16 @@ export default function LeftPanel({
         <div className="mb-6 pb-6 border-b border-slate-100 last:border-b-0 last:mb-0 last:pb-0">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Settings</h2>
           <label className="block text-sm font-medium text-slate-600 mb-2">
-            Default Wall Thickness
+            Wanddicke (cm)
           </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="number"
-              min="0"
-              step="1"
-              value={appState.globalWallThicknessCm}
-              onChange={(e) => onUpdateGlobalWallThickness(Number(e.target.value))}
-              className="input-field flex-1"
-            />
-            <span className="text-sm text-slate-400">cm</span>
-          </div>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={appState.globalWallThicknessCm}
+            onChange={(e) => onUpdateGlobalWallThickness(Number(e.target.value))}
+            className="input-field w-full"
+          />
         </div>
 
         {/* Import/Export */}

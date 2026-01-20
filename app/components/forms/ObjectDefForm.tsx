@@ -21,30 +21,37 @@ export function ObjectDefForm({ onAdd }: ObjectDefFormProps) {
   };
 
   return (
-    <form onSubmit={submit} className="space-y-2">
-      <input 
-        value={name} 
-        onChange={(e) => setName(e.target.value)} 
-        placeholder="Object name"
-        className="input-field" 
-      />
-      <div className="flex gap-2">
+    <form onSubmit={submit} className="space-y-3">
+      <div>
+        <label className="block text-sm font-medium text-slate-600 mb-1">Name</label>
         <input 
-          type="number" 
-          min={1} 
-          value={widthCm} 
-          onChange={(e)=>setWidthCm(Number(e.target.value))} 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} 
+          placeholder="Object name"
           className="input-field" 
-          placeholder="W"
         />
-        <input 
-          type="number" 
-          min={1} 
-          value={heightCm} 
-          onChange={(e)=>setHeightCm(Number(e.target.value))} 
-          className="input-field" 
-          placeholder="H"
-        />
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1">B (cm)</label>
+          <input 
+            type="number" 
+            min={1} 
+            value={widthCm} 
+            onChange={(e)=>setWidthCm(Number(e.target.value))} 
+            className="input-field w-full" 
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-600 mb-1">H (cm)</label>
+          <input 
+            type="number" 
+            min={1} 
+            value={heightCm} 
+            onChange={(e)=>setHeightCm(Number(e.target.value))} 
+            className="input-field w-full" 
+          />
+        </div>
       </div>
       <button type="submit" className="w-full btn bg-emerald-600 hover:bg-emerald-700 text-white">
         Add Object

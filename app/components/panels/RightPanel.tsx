@@ -157,9 +157,9 @@ function SelectedObjectPanel({
       <div className="space-y-4">
         
         {/* Editable Size */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Breite (cm)</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">B (cm)</label>
             <input
               type="number"
               value={effectiveWidth}
@@ -170,11 +170,11 @@ function SelectedObjectPanel({
                   onUpdateSize(selectedObject.id, val, effectiveHeight);
                 }
               }}
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-600 mb-1">Höhe (cm)</label>
+            <label className="block text-sm font-medium text-slate-600 mb-1">H (cm)</label>
             <input
               type="number"
               value={effectiveHeight}
@@ -185,15 +185,15 @@ function SelectedObjectPanel({
                   onUpdateSize(selectedObject.id, effectiveWidth, val);
                 }
               }}
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
         </div>
         
         {/* Editable Position */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">X Position (cm)</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">X (cm)</label>
             <input
               type="number"
               value={Math.round(selectedObject.xCm)}
@@ -203,7 +203,7 @@ function SelectedObjectPanel({
                   onUpdatePosition(selectedObject.id, val, selectedObject.yCm);
                 }
               }}
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
           <div>
@@ -217,7 +217,7 @@ function SelectedObjectPanel({
                   onUpdatePosition(selectedObject.id, selectedObject.xCm, val);
                 }
               }}
-              className="input-field"
+              className="input-field w-full"
             />
           </div>
         </div>
