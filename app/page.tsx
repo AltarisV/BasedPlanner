@@ -12,7 +12,7 @@ import { KeyboardShortcutsHelp, SvgCanvas, EditorToolbarFull } from './component
 import { SCALE, NUDGE_AMOUNT, NUDGE_AMOUNT_SHIFT, DEFAULT_DOOR_WIDTH } from './components/constants/editor';
 
 // Hooks
-import { useSvgPointerHandlers } from './hooks';
+import { useSvgPointerHandlers, useTouchGestures } from './hooks';
 
 /**
  * Main room editor component with three-panel layout:
@@ -80,6 +80,13 @@ export default function RoomEditor() {
     updateState,
     setHistory,
     handleSelectRoom,
+  });
+
+  // Touch gestures hook (pinch-to-zoom, two-finger pan)
+  const { handleTouchStart, handleTouchMove, handleTouchEnd } = useTouchGestures({
+    appState,
+    svgRef,
+    updateState,
   });
 
   // Types for label positions
@@ -298,6 +305,9 @@ export default function RoomEditor() {
             onPointerMove={handleSvgPointerMove}
             onPointerUp={handleSvgPointerUp}
             onWheel={handleSvgWheel}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           />
 
           {/* HTML overlay for labels */}

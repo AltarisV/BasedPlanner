@@ -30,6 +30,9 @@ interface SvgCanvasProps {
   onPointerMove: (e: React.PointerEvent<SVGSVGElement>) => void;
   onPointerUp: (e: React.PointerEvent<SVGSVGElement>) => void;
   onWheel: (e: React.WheelEvent<SVGSVGElement>) => void;
+  onTouchStart?: (e: React.TouchEvent<SVGSVGElement>) => void;
+  onTouchMove?: (e: React.TouchEvent<SVGSVGElement>) => void;
+  onTouchEnd?: (e: React.TouchEvent<SVGSVGElement>) => void;
 }
 
 // Wall rendering data type
@@ -171,6 +174,9 @@ export default function SvgCanvas({
   onPointerMove,
   onPointerUp,
   onWheel,
+  onTouchStart,
+  onTouchMove,
+  onTouchEnd,
 }: SvgCanvasProps) {
   const isDraggingRoom = dragState && dragState.roomId !== '__pan__';
 
@@ -333,12 +339,16 @@ export default function SvgCanvas({
       width="100%"
       height="100%"
       className={`absolute inset-0 bg-slate-50 ${toolMode === 'measure' ? 'cursor-crosshair' : isDraggingRoom ? 'cursor-grabbing' : 'cursor-move'}`}
+      style={{ touchAction: 'none' }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onPointerLeave={onPointerUp}
       onWheel={onWheel}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
       viewBox="0 0 10000 10000"
       preserveAspectRatio="xMidYMid meet"
     >
